@@ -1,19 +1,37 @@
-// import modules
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
-// using modules
+const { ERROR } = require("./utils/res.status.text");
+const mongoose = require("mongoose");
+const NotesRouters = require("./routes/notes.routes");
 dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
-// body parses
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("Mongodb Has Connected");
+  })
+  .catch((err) => {
+    console.log("The Error Is: ", err);
+  });
 app.use(express.json());
-// loger midllewars
 app.use(morgan("dev"));
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "Success",
-    data: "Notes",
+app.use("/api/v1/notes", NotesRouters);
+app.use("*", (req, res) => {
+  res.status(404).json({
+    status: ERROR,
+    Data: null,
+    messgae: "Route Not Found",
+    code: 404,
+  });
+});
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    status: err.statusText || ERROR,
+    data: err.data || null,
+    message: err.message,
+    code: err.statusCode || 500,
   });
 });
 app.listen(PORT, () => {
