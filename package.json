@@ -1,0 +1,30 @@
+{
+  "name": "memospace",
+  "version": "1.0.0",
+  "description": "memospace is a simple yet powerful web app designed to help you capture, organize, and manage your thoughts effortlessly. Whether you're jotting down quick ideas, writing detailed notes, or brainstorming your next big project, memospace provides a clean and intuitive interface that makes note-taking a breeze.",
+  "homepage": "https://github.com/HichamIssoual/MemoSpace#readme",
+  "bugs": {
+    "url": "https://github.com/HichamIssoual/MemoSpace/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HichamIssoual/MemoSpace.git"
+  },
+  "license": "MIT",
+  "author": "hichamIssoual",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cor": "^0.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1",
+    "validator": "^13.12.0"
+  }
+}
