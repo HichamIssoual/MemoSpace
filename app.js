@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const { ERROR } = require("./utils/res.status.text");
 const mongoose = require("mongoose");
 const NotesRouters = require("./routes/notes.routes");
+const UsersRouters = require("./routes/users.routes");
 dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
@@ -18,6 +19,7 @@ mongoose
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api/v1/notes", NotesRouters);
+app.use("/api/v1/users", UsersRouters);
 app.use("*", (req, res) => {
   res.status(404).json({
     status: ERROR,
