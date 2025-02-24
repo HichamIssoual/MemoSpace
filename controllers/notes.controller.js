@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const handleAsyncError = require("../middlewares/handle.async.error");
 const NoteModel = require("../models/note.model");
 const errorGenerator = require("../utils/error.generator");
@@ -29,8 +30,13 @@ const getSingleNote = handleAsyncError(async (req, res, next) => {
   });
 });
 const addNote = handleAsyncError(async (req, res, next) => {
-  const { userId, title, description, color } = req.body;
+  const error = validationResult(req);
 
+  if (!error.isEmpty()) {
+    const err = errorGenerator.generate(error.array().at(0).msg, 400, ERROR);
+    return next(err);
+  }
+  const { userId, title, description, color } = req.body;
   const newNote = new NoteModel({
     userId: userId,
     title: title,
@@ -54,10 +60,8 @@ const updateNote = handleAsyncError(async (req, res, next) => {
     return next(error);
   }
   const updateNote = await NoteModel.findOneAndUpdate(
-    noteId,
-    {
-      $set: { ...req.body },
-    },
+    { _id: noteId },
+    { $set: { ...req.body } },
     { new: true, runValidators: true }
   );
   res.status(200).json({
@@ -75,7 +79,7 @@ const deleteNote = handleAsyncError(async (req, res, next) => {
     const error = errorGenerator.generate("Note Note Found", 404, FAIL);
     return next(error);
   }
-  await NoteModel.deleteOne(noteId);
+  await NoteModel.deleteOne({ _id: noteId });
   res.status(200).json({
     status: SUCCESS,
     message: "Note Deleted successfully",

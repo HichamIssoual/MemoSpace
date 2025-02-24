@@ -15,12 +15,10 @@ const noteSchema = mongoose.Schema({
   },
   color: {
     type: String,
-    required: true,
     default: "#fff",
   },
   createAt: {
     type: Date,
-    required: true,
     default: Date.now(),
   },
 });
