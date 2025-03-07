@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    validate: [isStrongPassword, "Must Enter A strong password"],
   },
 });
 

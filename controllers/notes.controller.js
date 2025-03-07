@@ -5,7 +5,6 @@ const errorGenerator = require("../utils/error.generator");
 const { ERROR, SUCCESS, FAIL } = require("./../utils/res.status.text");
 const getAllNotes = handleAsyncError(async (req, res, next) => {
   const userId = req.userId.id;
-  console.log(userId);
   const allNotes = await NoteModel.find(
     { userId: userId },
     "userId title description color createAt"
@@ -33,11 +32,11 @@ const getSingleNote = handleAsyncError(async (req, res, next) => {
 });
 const addNote = handleAsyncError(async (req, res, next) => {
   const error = validationResult(req);
-
   if (!error.isEmpty()) {
     const err = errorGenerator.generate(error.array().at(0).msg, 400, ERROR);
     return next(err);
   }
+
   const { title, description, color } = req.body;
   const { id } = req.userId;
 

@@ -5,9 +5,11 @@ const { ERROR } = require("./utils/res.status.text");
 const mongoose = require("mongoose");
 const NotesRouters = require("./routes/notes.routes");
 const UsersRouters = require("./routes/users.routes");
+const cors = require("cors");
 dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
+app.use(cors());
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

@@ -23,14 +23,6 @@ const register = handleAsyncError(async (req, res, next) => {
     );
     return next(error);
   }
-  if (!validator.isStrongPassword(password)) {
-    const error = errorGenerator.generate(
-      "must enter a strong password",
-      400,
-      ERROR
-    );
-    return next(error);
-  }
   const userExits = await UserModel.findOne({ email: email });
   if (userExits) {
     const error = errorGenerator.generate("somthing wrong", 400, ERROR);
@@ -71,12 +63,12 @@ const login = handleAsyncError(async (req, res, next) => {
     return next(error);
   }
   const userExits = await UserModel.findOne({ email: email });
-  if (!userExits) {
+  const matchedPassword = await bcrypt.compare(password, userExits.password);
+  if (!userExits || !matchedPassword) {
     const error = errorGenerator.generate("Somthing wrong", 400, FAIL);
     return next(error);
   }
-  console.log(userExits.password);
-  const matchedPassword = await bcrypt.compare(password, userExits.password);
+
   if (userExits && matchedPassword) {
     const token = tokenGenerator({ id: userExits._id });
     res.status(200).json({
